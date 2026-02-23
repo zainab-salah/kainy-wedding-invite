@@ -1,7 +1,13 @@
-import type { Metadata } from 'next'
-import { Geist, Geist_Mono, Cormorant_Garamond, Pinyon_Script } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import './globals.css'
+import type { Metadata } from "next";
+import {
+  Geist,
+  Geist_Mono,
+  Cormorant_Garamond,
+  Pinyon_Script,
+  Noto_Nastaliq_Urdu,
+} from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import "./globals.css";
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -15,40 +21,71 @@ const _pinyonScript = Pinyon_Script({
   weight: "400",
 });
 
+const notoNastaliq = Noto_Nastaliq_Urdu({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-noto-nastaliq",
+});
+
 export const metadata: Metadata = {
-  title: 'Orhan & Kainy - Wedding Invitation',
-  description: 'You are cordially invited to the wedding of Orhan & Kainy - Sunday, May 10th in Istanbul',
-  generator: 'v0.app',
+  title: "Orhan & Kainy - Wedding Invitation",
+  description:
+    "You are cordially invited to the wedding of Orhan & Kainy - Sunday, May 10th in Istanbul",
+  generator: "v0.app",
+  openGraph: {
+    title: "Orhan & Kainy - Wedding Invitation",
+    description:
+      "You are cordially invited to the wedding of Orhan & Kainy - Sunday, May 10th in Istanbul",
+    url: "https://orhan-kainy.vercel.app",
+    siteName: "Orhan & Kainy Wedding",
+    images: [
+      {
+        url: "/seoimg.jpeg",
+        width: 1200,
+        height: 630,
+        alt: "Orhan & Kainy Wedding Invitation Preview",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Orhan & Kainy - Wedding Invitation",
+    description:
+      "You are cordially invited to the wedding of Orhan & Kainy - Sunday, May 10th in Istanbul",
+    images: ["/seoimg.jpeg"],
+  },
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
+        url: "/icon-light-32x32.png",
+        media: "(prefers-color-scheme: light)",
       },
       {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
+        url: "/icon-dark-32x32.png",
+        media: "(prefers-color-scheme: dark)",
       },
       {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: "/icon.svg",
+        type: "image/svg+xml",
       },
     ],
-    apple: '/apple-icon.png',
+    apple: "/apple-icon.png",
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased">
+      <body className={`font-sans antialiased ${notoNastaliq.variable}`}>
         {children}
         <Analytics />
       </body>
     </html>
-  )
+  );
 }

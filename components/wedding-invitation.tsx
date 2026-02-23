@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-type Lang = "en" | "ar" | "tr";
+type Lang = "tr" | "ar" | "en";
 
 const translations: Record<
   Lang,
@@ -26,12 +27,11 @@ const translations: Record<
     location: "Aynalı Çarşı, Barış, Açelya Cd. No:7\nBeylikdüzü/İstanbul",
   },
   ar: {
-    withJoy: "\u0628\u0643\u0644 \u0641\u0631\u062D",
-    invite:
-      "\u0646\u062F\u0639\u0648\u0643\u0645 \u0644\u062D\u0636\u0648\u0631",
-    theWeddingOf: "\u062D\u0641\u0644 \u0632\u0641\u0627\u0641",
+    withJoy: "بكل فرح",
+    invite: "ندعوكم لحضور",
+    theWeddingOf: "حفل زفاف",
     names: "كايني واورهان",
-    date: "\u0627\u0644\u0623\u062D\u062F\u060C 10 \u0645\u0627\u064A\u0648",
+    date: "الاحد ١٠ مايو",
     time: "17:00 - 13:00 ",
     location: "Aynalı Çarşı, Barış, Açelya Cd. No:7\nBeylikdüzü/İstanbul",
   },
@@ -39,7 +39,7 @@ const translations: Record<
     withJoy: "mutlulukla",
     invite: "sizi davet ediyoruz",
     theWeddingOf: "Düğün Töreni",
-    names: "ORHAN & KAINY",
+    names: "ORHAN & ZAINAB",
     date: "PAZAR, 10 MAYIS",
     time: "13:00 - 17:00",
     location: "Aynalı Çarşı, Barış, Açelya Cd. No:7\nBeylikdüzü/İstanbul",
@@ -47,58 +47,65 @@ const translations: Record<
 };
 
 const langLabels: Record<Lang, string> = {
+  tr: "Türkçe",
+  ar: "العربية",
   en: "English",
-  ar: "\u0627\u0644\u0639\u0631\u0628\u064A\u0629",
-  tr: "T\u00FCrk\u00E7e",
 };
 
 const IMAGE_URL = "/bganimated.gif";
 
 export default function WeddingInvitation() {
-  const [lang, setLang] = useState<Lang>("en");
-  const [isStarted, setIsStarted] = useState(false);
+  const [lang, setLang] = useState<Lang>("tr");
 
   const t = translations[lang];
   const isRtl = lang === "ar";
 
-  if (!isStarted) {
-    return (
-      <main
-        className="relative flex min-h-screen flex-col items-center justify-center bg-[#f5f0eb] cursor-pointer"
-        onClick={() => setIsStarted(true)}
-      >
-        <p className="font-serif text-[#5a6b5a] text-xl tracking-widest animate-pulse">
-          {lang === "ar"
-            ? "انقر للفتح"
-            : lang === "tr"
-              ? "Açmak için tıklayın"
-              : "Tap to open"}
-        </p>
-      </main>
-    );
-  }
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.4,
+        delayChildren: 0.2,
+      },
+    },
+    exit: {
+      opacity: 0,
+      transition: { duration: 0.3 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.7 },
+    },
+  };
+
+  const namesVariants = {
+    hidden: { opacity: 0, y: 10 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.7, delay: 3.5 },
+    },
+  };
 
   return (
     <main className="relative flex min-h-screen flex-col items-center bg-[#f5f0eb]">
-      {/* Background Audio */}
-      <audio
-        src="/Waltz-of-the-flowers.mp3"
-        autoPlay
-        loop
-        playsInline
-        className="hidden"
-      />
-
       {/* Language Selector */}
-      <div className="fixed bottom-20 left-1/2 z-40 flex -translate-x-1/2 gap-1 rounded-full bg-[#f5f0eb]/80 p-1 shadow-md backdrop-blur-sm border border-[#c5b9a8]/30">
+      <div className="fixed bottom-20  left-1/2 z-40 flex -translate-x-1/2 gap-1 rounded-full bg-[#f5f0eb]/80 p-1 shadow-md backdrop-blur-sm border border-[#c5b9a8]/30">
         {(Object.keys(langLabels) as Lang[]).map((l) => (
           <button
             key={l}
             onClick={() => setLang(l)}
             className={`rounded-full cursor-pointer px-4 py-1.5 text-xs tracking-wider transition-all font-serif ${
               lang === l
-                ? "bg-[#6b7c6b] text-[#f5f0eb] shadow-sm"
-                : "text-[#6b7c6b] hover:bg-[#6b7c6b]/10"
+                ? "bg-[#6b7c6b] text-[#f5f0eb] cursor-pointer! shadow-sm"
+                : "text-[#6b7c6b] cursor-pointer! hover:bg-[#6b7c6b]/10"
             }`}
           >
             {langLabels[l]}
@@ -108,179 +115,257 @@ export default function WeddingInvitation() {
 
       {/* Invitation Card */}
       <div className="relative w-full max-w-lg mx-auto sm:h-[800px] h-[100dvh] flex items-center justify-center overflow-hidden">
-        <img
+        <motion.img
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5 }}
           src={IMAGE_URL}
           alt="Wedding invitation with sage green floral decorations for Orhan and Kainy"
           className="w-full h-full object-cover object-top block absolute inset-0 z-0"
           loading="eager"
         />
 
-        {/* Translatable text overlay: "with joy" + "we invite you to attend" */}
-        <div
-          className="absolute left-0 right-0 flex flex-col items-center z-10"
-          style={{ top: "30%" }}
-          dir={isRtl ? "rtl" : "ltr"}
-        >
-          {/* "with joy" - Cormorant Garamond Light, ~15px, tracking wide */}
-          <p
-            className="font-serif text-[#5a6b5a]"
-            style={{
-              fontSize: "clamp(16px, 4vw, 20px)",
-              fontWeight: 300,
-              letterSpacing: "0.12em",
-              lineHeight: 1.4,
-            }}
+        {/* Global staggered flex container for all text blocks */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={lang}
+            className="absolute inset-0 z-10 pointers-events-none"
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            exit="exit"
           >
-            {t.withJoy}
-          </p>
+            {/* Translatable text overlay: "with joy" + "we invite you to attend" */}
+            <div
+              className="absolute left-0 right-0 flex flex-col items-center"
+              style={{ top: "30%" }}
+              dir={isRtl ? "rtl" : "ltr"}
+            >
+              {/* "with joy" */}
+              <motion.p
+                variants={itemVariants}
+                className={`font-serif text-[#5a6b5a] ${lang === "ar" ? "font-noto-nastaliq" : ""}`}
+                style={{
+                  fontFamily:
+                    lang === "ar"
+                      ? "var(--font-noto-nastaliq), serif"
+                      : undefined,
+                  fontSize:
+                    lang === "ar"
+                      ? "clamp(24px, 5vw, 32px)"
+                      : "clamp(16px, 4vw, 20px)",
+                  fontWeight: 300,
+                  letterSpacing: "0.12em",
+                  lineHeight: lang === "ar" ? 2 : 1.4,
+                }}
+              >
+                {t.withJoy}
+              </motion.p>
 
-          {/* "we invite you to attend" - same style, small gap */}
-          <p
-            className="font-serif text-[#5a6b5a]"
-            style={{
-              fontSize: "clamp(16px, 4vw, 20px)",
-              fontWeight: 300,
-              letterSpacing: "0.12em",
-              lineHeight: 1.4,
-              marginTop: "clamp(2px, 0.6vw, 6px)",
-            }}
-          >
-            {t.invite}
-          </p>
-        </div>
+              {/* "we invite you to attend" */}
+              <motion.p
+                variants={itemVariants}
+                className={`font-serif text-[#5a6b5a] ${lang === "ar" ? "font-noto-nastaliq" : ""}`}
+                style={{
+                  fontFamily:
+                    lang === "ar"
+                      ? "var(--font-noto-nastaliq), serif"
+                      : undefined,
+                  fontSize:
+                    lang === "ar"
+                      ? "clamp(24px, 5vw, 32px)"
+                      : "clamp(16px, 4vw, 20px)",
+                  fontWeight: 300,
+                  letterSpacing: "0.12em",
+                  lineHeight: lang === "ar" ? 2 : 1.4,
+                  marginTop: lang === "ar" ? "20px" : "clamp(2px, 0.6vw, 6px)",
+                }}
+              >
+                {t.invite}
+              </motion.p>
+            </div>
 
-        {/* "the Wedding of" - Pinyon Script cursive */}
-        <div
-          className="absolute left-0 right-0 flex flex-col items-center z-10"
-          style={{ top: "38%" }}
-          dir={isRtl ? "rtl" : "ltr"}
-        >
-          {lang === "ar" ? (
-            <p
-              className="text-[#4a5a4a]"
-              style={{
-                fontFamily: "'Kaman', serif",
-                fontSize: "clamp(34px, 8vw, 48px)",
-                fontWeight: "normal",
-                letterSpacing: "0.02em",
-                lineHeight: 1.2,
-                marginTop: "-10px",
-              }}
+            {/* "the Wedding of" */}
+            <div
+              className="absolute left-0 right-0 flex flex-col items-center"
+              style={{ top: lang === "ar" ? "41%" : "38%" }}
+              dir={isRtl ? "rtl" : "ltr"}
             >
-              {t.theWeddingOf}
-            </p>
-          ) : lang === "tr" ? (
-            <p
-              className="font-serif italic text-[#4a5a4a]"
-              style={{
-                fontSize: "clamp(24px, 5.5vw, 32px)",
-                fontWeight: 400,
-                letterSpacing: "0.02em",
-              }}
-            >
-              {t.theWeddingOf}
-            </p>
-          ) : (
-            <p
-              className="text-[#4a5a4a]"
-              style={{
-                fontFamily: "var(--font-script)",
-                fontSize: "clamp(32px, 7vw, 42px)",
-                fontWeight: 400,
-                lineHeight: 1.2,
-              }}
-            >
-              {t.theWeddingOf}
-            </p>
-          )}
-        </div>
+              {lang === "ar" ? (
+                <motion.p
+                  variants={itemVariants}
+                  className="text-[#4a5a4a] font-noto-nastaliq"
+                  style={{
+                    fontFamily: "var(--font-noto-nastaliq), serif",
+                    fontSize: "clamp(28px, 6vw, 38px)",
+                    fontWeight: "normal",
+                    letterSpacing: "0.02em",
+                    lineHeight: 1.6,
+                    marginTop: "10px",
+                  }}
+                >
+                  {t.theWeddingOf}
+                </motion.p>
+              ) : lang === "tr" ? (
+                <motion.p
+                  variants={itemVariants}
+                  className="font-serif italic text-[#4a5a4a]"
+                  style={{
+                    fontSize: "clamp(24px, 5.5vw, 32px)",
+                    fontWeight: 400,
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  {t.theWeddingOf}
+                </motion.p>
+              ) : (
+                <motion.p
+                  variants={itemVariants}
+                  className="text-[#4a5a4a]"
+                  style={{
+                    fontFamily: "var(--font-script)",
+                    fontSize: "clamp(32px, 7vw, 42px)",
+                    fontWeight: 400,
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {t.theWeddingOf}
+                </motion.p>
+              )}
+            </div>
 
-        {/* Names */}
-        <div
-          className="absolute left-0 right-0 flex flex-col items-center z-10"
-          style={{ top: "45%" }}
-          dir={isRtl ? "rtl" : "ltr"}
-        >
-          {lang === "ar" ? (
-            <p
-              className="text-[#4a5a4a]"
-              style={{
-                fontFamily: "'Kaman', serif",
-                fontSize: "clamp(46px, 12vw, 64px)",
-                fontWeight: "normal",
-                lineHeight: 1.2,
-                marginTop: "-10px",
-              }}
+            {/* Names */}
+            <div
+              className="absolute left-0 right-0 flex flex-col items-center"
+              style={{ top: lang === "ar" ? "50%" : "45%" }}
+              dir={isRtl ? "rtl" : "ltr"}
             >
-              {t.names}
-            </p>
-          ) : (
-            <p
-              className="font-serif text-[#4a5a4a] text-center px-4"
-              style={{
-                fontSize: "clamp(34px, 8vw, 46px)",
-                fontWeight: 400,
-                lineHeight: 1.2,
-                letterSpacing: "0.05em",
-              }}
-            >
-              {t.names}
-            </p>
-          )}
-        </div>
+              {lang === "ar" ? (
+                <motion.p
+                  variants={itemVariants}
+                  className="text-[#4a5a4a]"
+                  style={{
+                    fontFamily: "Kaman, serif",
+                    fontSize: "clamp(46px, 12vw, 64px)",
+                    fontWeight: "normal",
+                    lineHeight: 1.6,
+                    marginTop: "10px",
+                  }}
+                >
+                  {t.names}
+                </motion.p>
+              ) : (
+                <motion.p
+                  variants={itemVariants}
+                  className="font-serif text-[#4a5a4a] text-center px-4"
+                  style={{
+                    fontSize: "clamp(34px, 8vw, 46px)",
+                    fontWeight: 400,
+                    lineHeight: 1.2,
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  {t.names}
+                </motion.p>
+              )}
+            </div>
 
-        {/* Date, Time & Location group */}
-        <div
-          className="absolute left-0 right-0 flex flex-col items-center gap-5 z-10"
-          style={{ top: "59%" }}
-          dir={isRtl ? "rtl" : "ltr"}
-        >
-          {/* Date */}
-          <p
-            className="font-serif italic text-[#4a5a4a]"
-            style={{
-              fontSize: "clamp(16px, 4.5vw, 24px)",
-              fontWeight: 500,
-              letterSpacing: "0.2em",
-              lineHeight: 1.3,
-              marginBottom: "1vh",
-            }}
-          >
-            {t.date}
-          </p>
-
-          <div className="flex flex-col items-center gap-4">
-            {/* Time */}
-            <p
-              className="font-serif text-[#5a6b5a]"
-              style={{
-                fontSize: "clamp(14px, 3.5vw, 18px)",
-                fontWeight: 400,
-                letterSpacing: "0.15em",
-                lineHeight: 1.4,
-                textAlign: "center",
-              }}
+            {/* Date, Time & Location group */}
+            <div
+              className="absolute left-0 right-0 flex flex-col items-center gap-5"
+              style={{ top: lang === "ar" ? "63%" : "59%" }}
+              dir={isRtl ? "rtl" : "ltr"}
             >
-              {t.time}
-            </p>
+              {/* Date */}
+              <motion.p
+                variants={itemVariants}
+                className={`font-serif text-[#4a5a4a] ${lang === "ar" ? "font-noto-nastaliq" : "italic"}`}
+                style={{
+                  fontFamily:
+                    lang === "ar"
+                      ? "var(--font-noto-nastaliq), serif"
+                      : undefined,
+                  fontSize:
+                    lang === "ar"
+                      ? "clamp(22px, 5.5vw, 32px)"
+                      : "clamp(16px, 4.5vw, 24px)",
+                  fontWeight: 500,
+                  letterSpacing: "0.2em",
+                  lineHeight: 1.3,
+                  marginBottom: "1vh",
+                }}
+              >
+                {t.date}
+              </motion.p>
 
-            {/* Location */}
-            <p
-              className="font-serif text-[#5a6b5a]"
-              style={{
-                fontSize: "clamp(15px, 4vw, 18px)",
-                fontWeight: 400,
-                letterSpacing: "0.1em",
-                lineHeight: 1.8,
-                textAlign: "center",
-                whiteSpace: "pre-wrap",
-              }}
-            >
-              {t.location}
-            </p>
-          </div>
-        </div>
+              <div className="flex flex-col items-center gap-4">
+                {/* Time */}
+                <motion.p
+                  variants={itemVariants}
+                  className="font-serif text-[#5a6b5a]"
+                  style={{
+                    fontSize: "clamp(14px, 3.5vw, 18px)",
+                    fontWeight: 400,
+                    letterSpacing: "0.15em",
+                    lineHeight: 1.4,
+                    textAlign: "center",
+                  }}
+                >
+                  {t.time}
+                </motion.p>
+
+                {/* Location */}
+                <motion.a
+                  variants={itemVariants}
+                  href="https://maps.app.goo.gl/XksNf4xgwMeoehWaA"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-serif text-[#5a6b5a] hover:text-[#4a5a4a] transition-colors"
+                  style={{
+                    fontSize: "clamp(15px, 4vw, 18px)",
+                    fontWeight: 400,
+                    letterSpacing: "0.1em",
+                    lineHeight: 1.8,
+                    textAlign: "center",
+                    whiteSpace: "pre-wrap",
+                    textDecoration: "none",
+                  }}
+                >
+                  {t.location}
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{
+                      display: "inline",
+                      verticalAlign: "middle",
+                      marginLeft: "4px",
+                    }}
+                  >
+                    <line x1="7" y1="17" x2="17" y2="7" />
+                    <polyline points="7 7 17 7 17 17" />
+                  </svg>
+                </motion.a>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
+
+      {/* Footer credit */}
+      <a
+        href="https://www.instagram.com/kainy_onodera"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="pb-3 pt-3 text-[10px] tracking-[0.15em] text-[#b0a898] hover:text-[#8a7e70] transition-colors"
+      >
+        created by @kainy_onodera
+      </a>
     </main>
   );
 }
