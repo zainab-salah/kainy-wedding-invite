@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useEffect, useRef, useState, useCallback } from "react";
 
 // Waltz in 3/4 time - a simple elegant melody
 const WALTZ_NOTES = [
@@ -63,7 +63,7 @@ const WALTZ_NOTES = [
   { note: "E5", duration: 0.25, time: 14.75 },
   // Bar 16
   { note: "C5", duration: 1.0, time: 15.0 },
-]
+];
 
 // Bass accompaniment (oom-pah-pah pattern)
 const BASS_NOTES = [
@@ -118,131 +118,153 @@ const BASS_NOTES = [
   { note: "C3", duration: 0.6, time: 14.0 },
   { note: "E3", duration: 0.2, time: 14.75 },
   { note: "C3", duration: 1.0, time: 15.0 },
-]
+];
 
 const NOTE_FREQUENCIES: Record<string, number> = {
-  C2: 65.41, D2: 73.42, E2: 82.41, F2: 87.31, G2: 98.0, A2: 110.0, B2: 123.47,
-  C3: 130.81, D3: 146.83, E3: 164.81, F3: 174.61, G3: 196.0, A3: 220.0, B3: 246.94,
-  C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.0, A4: 440.0, B4: 493.88,
-  C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99,
-}
+  C2: 65.41,
+  D2: 73.42,
+  E2: 82.41,
+  F2: 87.31,
+  G2: 98.0,
+  A2: 110.0,
+  B2: 123.47,
+  C3: 130.81,
+  D3: 146.83,
+  E3: 164.81,
+  F3: 174.61,
+  G3: 196.0,
+  A3: 220.0,
+  B3: 246.94,
+  C4: 261.63,
+  D4: 293.66,
+  E4: 329.63,
+  F4: 349.23,
+  G4: 392.0,
+  A4: 440.0,
+  B4: 493.88,
+  C5: 523.25,
+  D5: 587.33,
+  E5: 659.25,
+  F5: 698.46,
+  G5: 783.99,
+};
 
 function playPianoNote(
   ctx: AudioContext,
   freq: number,
   startTime: number,
   duration: number,
-  volume: number
+  volume: number,
 ) {
   // Create a more piano-like sound with multiple harmonics
-  const osc1 = ctx.createOscillator()
-  const osc2 = ctx.createOscillator()
-  const gainNode = ctx.createGain()
+  const osc1 = ctx.createOscillator();
+  const osc2 = ctx.createOscillator();
+  const gainNode = ctx.createGain();
 
-  osc1.type = "sine"
-  osc1.frequency.value = freq
+  osc1.type = "sine";
+  osc1.frequency.value = freq;
 
-  osc2.type = "sine"
-  osc2.frequency.value = freq * 2 // First harmonic
-  
-  const gain2 = ctx.createGain()
-  gain2.gain.value = 0.3
+  osc2.type = "sine";
+  osc2.frequency.value = freq * 2; // First harmonic
+
+  const gain2 = ctx.createGain();
+  gain2.gain.value = 0.3;
 
   // ADSR envelope for piano feel
-  gainNode.gain.setValueAtTime(0, startTime)
-  gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.02)
-  gainNode.gain.exponentialRampToValueAtTime(volume * 0.7, startTime + 0.1)
-  gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration + 0.5)
+  gainNode.gain.setValueAtTime(0, startTime);
+  gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.02);
+  gainNode.gain.exponentialRampToValueAtTime(volume * 0.7, startTime + 0.1);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration + 0.5);
 
-  osc1.connect(gainNode)
-  osc2.connect(gain2)
-  gain2.connect(gainNode)
-  gainNode.connect(ctx.destination)
+  osc1.connect(gainNode);
+  osc2.connect(gain2);
+  gain2.connect(gainNode);
+  gainNode.connect(ctx.destination);
 
-  osc1.start(startTime)
-  osc1.stop(startTime + duration + 0.6)
-  osc2.start(startTime)
-  osc2.stop(startTime + duration + 0.6)
+  osc1.start(startTime);
+  osc1.stop(startTime + duration + 0.6);
+  osc2.start(startTime);
+  osc2.stop(startTime + duration + 0.6);
 }
 
 export default function WaltzPlayer() {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [showPrompt, setShowPrompt] = useState(true)
-  const audioCtxRef = useRef<AudioContext | null>(null)
-  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(true);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const playWaltz = useCallback(() => {
-    if (audioCtxRef.current) return
+    if (audioCtxRef.current) return;
 
-    const ctx = new AudioContext()
-    audioCtxRef.current = ctx
-    setIsPlaying(true)
-    setShowPrompt(false)
+    const ctx = new AudioContext();
+    audioCtxRef.current = ctx;
+    setIsPlaying(true);
+    setShowPrompt(false);
 
-    const tempo = 0.55 // seconds per beat (slower, more elegant)
-    const loopDuration = 16 * tempo
+    const tempo = 0.55; // seconds per beat (slower, more elegant)
+    const loopDuration = 16 * tempo;
 
     function scheduleLoop(offset: number) {
       WALTZ_NOTES.forEach(({ note, duration, time }) => {
-        const freq = NOTE_FREQUENCIES[note]
+        const freq = NOTE_FREQUENCIES[note];
         if (freq) {
-          playPianoNote(ctx, freq, offset + time * tempo, duration * tempo, 0.15)
+          playPianoNote(
+            ctx,
+            freq,
+            offset + time * tempo,
+            duration * tempo,
+            0.15,
+          );
         }
-      })
+      });
       BASS_NOTES.forEach(({ note, duration, time }) => {
-        const freq = NOTE_FREQUENCIES[note]
+        const freq = NOTE_FREQUENCIES[note];
         if (freq) {
-          playPianoNote(ctx, freq, offset + time * tempo, duration * tempo, 0.08)
+          playPianoNote(
+            ctx,
+            freq,
+            offset + time * tempo,
+            duration * tempo,
+            0.08,
+          );
         }
-      })
+      });
     }
 
     // Schedule first two loops immediately
-    scheduleLoop(ctx.currentTime + 0.1)
-    scheduleLoop(ctx.currentTime + 0.1 + loopDuration)
+    scheduleLoop(ctx.currentTime + 0.1);
+    scheduleLoop(ctx.currentTime + 0.1 + loopDuration);
 
-    let loopCount = 2
+    let loopCount = 2;
     intervalRef.current = setInterval(() => {
-      scheduleLoop(ctx.currentTime + 0.1 + (loopCount - 1) * loopDuration)
-      loopCount++
-    }, loopDuration * 1000)
-  }, [])
+      scheduleLoop(ctx.currentTime + 0.1 + (loopCount - 1) * loopDuration);
+      loopCount++;
+    }, loopDuration * 1000);
+  }, []);
 
   const stopWaltz = useCallback(() => {
     if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
     if (audioCtxRef.current) {
-      audioCtxRef.current.close()
-      audioCtxRef.current = null
+      audioCtxRef.current.close();
+      audioCtxRef.current = null;
     }
-    setIsPlaying(false)
-  }, [])
+    setIsPlaying(false);
+  }, []);
 
   useEffect(() => {
     return () => {
-      stopWaltz()
-    }
-  }, [stopWaltz])
+      stopWaltz();
+    };
+  }, [stopWaltz]);
 
-  if (showPrompt) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#f5f0eb]/90 backdrop-blur-sm">
-        <button
-          onClick={playWaltz}
-          className="flex flex-col items-center gap-4 rounded-full bg-[#f5f0eb] px-10 py-8 shadow-lg transition-transform hover:scale-105 border border-[#c5b9a8]/30"
-        >
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6b7c6b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="5 3 19 12 5 21 5 3" fill="#6b7c6b" stroke="#6b7c6b" />
-          </svg>
-          <span className="text-sm tracking-[0.2em] text-[#6b7c6b] uppercase font-sans">
-            Tap to Enter
-          </span>
-        </button>
-      </div>
-    )
-  }
+  useEffect(() => {
+    // Attempt to play automatically when mounted if needed
+    // Note: Autoplay might be blocked by browsers until first user interaction
+    // playWaltz()
+  }, [playWaltz]);
 
   return (
     <button
@@ -251,7 +273,14 @@ export default function WaltzPlayer() {
       aria-label={isPlaying ? "Pause music" : "Play music"}
     >
       {isPlaying ? (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7c6b" strokeWidth="2">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#6b7c6b"
+          strokeWidth="2"
+        >
           <rect x="6" y="4" width="4" height="16" fill="#6b7c6b" />
           <rect x="14" y="4" width="4" height="16" fill="#6b7c6b" />
         </svg>
@@ -261,5 +290,5 @@ export default function WaltzPlayer() {
         </svg>
       )}
     </button>
-  )
+  );
 }
