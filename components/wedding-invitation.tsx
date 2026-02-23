@@ -30,7 +30,7 @@ const translations: Record<
     withJoy: "بكل فرح",
     invite: "ندعوكم لحضور",
     theWeddingOf: "حفل زفاف",
-    names: "كايني واورهان",
+    names: "زينب واورهان",
     date: "الاحد ١٠ مايو",
     time: "17:00 - 13:00 ",
     location: "Aynalı Çarşı, Barış, Açelya Cd. No:7\nBeylikdüzü/İstanbul",
