@@ -39,7 +39,7 @@ const translations: Record<
     withJoy: "mutlulukla",
     invite: "sizi davet ediyoruz",
     theWeddingOf: "Düğün Töreni",
-    names: "ORHAN & ZAINAB",
+    names: "ORHAN & ZEYNEP",
     date: "PAZAR, 10 MAYIS",
     time: "13:00 - 17:00",
     location: "Aynalı Çarşı, Barış, Açelya Cd. No:7\nBeylikdüzü/İstanbul",
