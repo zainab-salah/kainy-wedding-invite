@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     siteName: "Orhan & Kainy Wedding",
     images: [
       {
-        url: "/seoimg.jpeg",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Orhan & Kainy Wedding Invitation Preview",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     title: "Orhan & Kainy - Wedding Invitation",
     description:
       "You are cordially invited to the wedding of Orhan & Kainy - Sunday, May 10th in Istanbul",
-    images: ["/seoimg.jpeg"],
+    images: ["/og-image.jpg"],
   },
   icons: {
     icon: [
