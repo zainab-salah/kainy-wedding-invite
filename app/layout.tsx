@@ -19,6 +19,7 @@ const _cormorant = Cormorant_Garamond({
 const _pinyonScript = Pinyon_Script({
   subsets: ["latin"],
   weight: "400",
+  variable: "--font-script",
 });
 
 const notoNastaliq = Noto_Nastaliq_Urdu({
@@ -82,7 +83,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans antialiased ${notoNastaliq.variable}`}>
+      <body
+        className={`font-sans antialiased ${notoNastaliq.variable} ${_pinyonScript.variable}`}
+      >
         {children}
         <Analytics />
       </body>

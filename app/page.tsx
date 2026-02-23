@@ -57,7 +57,7 @@ export default function Page() {
           alt="Wedding background"
           className="absolute inset-0 w-full h-full object-cover object-top"
         />
-        <div className="absolute inset-0 bg-[#f5f0eb]/3 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-[#f5f0eb]/3 md:bg-[#f5f0eb]/50 backdrop-blur-sm" />
 
         {/* Left leaf */}
         <motion.img
@@ -83,12 +83,36 @@ export default function Page() {
 
         <motion.button
           onClick={handleStart}
-          className="relative z-10 cursor-pointer flex flex-col items-center gap-4 transition-transform hover:scale-105 "
+          className="relative z-10 cursor-pointer flex flex-col items-center gap-2 transition-transform hover:scale-105"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          <span className="text-sm tracking-[0.2em] text-[#6b7c6b] uppercase font-sans">
+          <span
+            className="text-[#5a6b5a]  mb-5"
+            style={{
+              fontFamily: "var(--font-noto-nastaliq), serif",
+              fontSize: "clamp(18px, 5vw, 24px)",
+            }}
+          >
+            اضغط للدخول
+          </span>
+          <span
+            className="text-[#5a6b5a]"
+            style={{
+              fontFamily: "var(--font-script), cursive",
+              fontSize: "clamp(22px, 6vw, 30px)",
+            }}
+          >
+            Girmek için dokun
+          </span>
+          <span
+            className="text-[#5a6b5a]"
+            style={{
+              fontFamily: "var(--font-script), cursive",
+              fontSize: "clamp(22px, 6vw, 30px)",
+            }}
+          >
             Tap to Enter
           </span>
         </motion.button>

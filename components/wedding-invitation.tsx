@@ -97,7 +97,7 @@ export default function WeddingInvitation() {
   return (
     <main className="relative flex min-h-screen flex-col items-center bg-[#f5f0eb]">
       {/* Language Selector */}
-      <div className="fixed bottom-20  left-1/2 z-40 flex -translate-x-1/2 gap-1 rounded-full bg-[#f5f0eb]/80 p-1 shadow-md backdrop-blur-sm border border-[#c5b9a8]/30">
+      <div className="fixed bottom-10  left-1/2 z-40 flex -translate-x-1/2 gap-1 rounded-full bg-[#f5f0eb]/80 p-1 shadow-md backdrop-blur-sm border border-[#c5b9a8]/30">
         {(Object.keys(langLabels) as Lang[]).map((l) => (
           <button
             key={l}
@@ -114,7 +114,7 @@ export default function WeddingInvitation() {
       </div>
 
       {/* Invitation Card */}
-      <div className="relative w-full max-w-lg mx-auto sm:h-[800px] h-[100dvh] flex items-center justify-center overflow-hidden">
+      <div className="relative w-full max-w-lg mx-auto h-[100dvh] flex items-center justify-center overflow-hidden">
         <motion.img
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -138,7 +138,7 @@ export default function WeddingInvitation() {
             {/* Translatable text overlay: "with joy" + "we invite you to attend" */}
             <div
               className="absolute left-0 right-0 flex flex-col items-center"
-              style={{ top: "30%" }}
+              style={{ top: lang === "ar" ? "28%" : "30%" }}
               dir={isRtl ? "rtl" : "ltr"}
             >
               {/* "with joy" */}
@@ -188,7 +188,7 @@ export default function WeddingInvitation() {
             {/* "the Wedding of" */}
             <div
               className="absolute left-0 right-0 flex flex-col items-center"
-              style={{ top: lang === "ar" ? "41%" : "38%" }}
+              style={{ top: lang === "ar" ? "43%" : "38%" }}
               dir={isRtl ? "rtl" : "ltr"}
             >
               {lang === "ar" ? (
@@ -237,7 +237,7 @@ export default function WeddingInvitation() {
             {/* Names */}
             <div
               className="absolute left-0 right-0 flex flex-col items-center"
-              style={{ top: lang === "ar" ? "50%" : "45%" }}
+              style={{ top: lang === "ar" ? "52%" : "45%" }}
               dir={isRtl ? "rtl" : "ltr"}
             >
               {lang === "ar" ? (
@@ -273,7 +273,7 @@ export default function WeddingInvitation() {
             {/* Date, Time & Location group */}
             <div
               className="absolute left-0 right-0 flex flex-col items-center gap-5"
-              style={{ top: lang === "ar" ? "63%" : "59%" }}
+              style={{ top: lang === "ar" ? "65%" : "59%" }}
               dir={isRtl ? "rtl" : "ltr"}
             >
               {/* Date */}
