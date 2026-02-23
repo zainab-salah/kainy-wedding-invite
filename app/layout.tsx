@@ -29,6 +29,7 @@ const notoNastaliq = Noto_Nastaliq_Urdu({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://kainy-wedding-invite.vercel.app/"),
   title: "Orhan & Kainy - Wedding Invitation",
   description:
     "You are cordially invited to the wedding of Orhan & Kainy - Sunday, May 10th in Istanbul",
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
     title: "Orhan & Kainy - Wedding Invitation",
     description:
       "You are cordially invited to the wedding of Orhan & Kainy - Sunday, May 10th in Istanbul",
-    url: "https://orhan-kainy.vercel.app",
+    url: "https://kainy-wedding-invite.vercel.app/",
     siteName: "Orhan & Kainy Wedding",
     images: [
       {
